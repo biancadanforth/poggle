@@ -9,7 +9,6 @@ class Board extends React.Component {
   }
   
   render() {
-    const currentWord = "temp";
     return(
       <div>
       <div className="row">
@@ -47,8 +46,6 @@ class Board extends React.Component {
       	{this.renderSquare(23)}
       	{this.renderSquare(24)}
       </div>
-      <div className="current-header">Current Word</div>
-      <div className="current-word">{currentWord}</div>
       </div>
     )
   }
