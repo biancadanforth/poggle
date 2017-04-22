@@ -12,9 +12,9 @@ for (let i = 0; i < configurations.length; i++) {
 	// remove result from array so it doesn't recurr
 	newConfigurations.splice(configIndex, 1);
 	let configCharIndex = Math.floor(Math.random()*configString.length);
-	let configChar = configString.charAt(configCharIndex).toUpperCase();
-	if (configChar === 'Q') {
-		configChar = 'Qu';
+	let configChar = configString.charAt(configCharIndex);
+	if (configChar === 'q') {
+		configChar = 'qu';
 	}
 	charArray.push(configChar);
 }
@@ -72,42 +72,18 @@ class Board extends React.Component {
   
   render() {
     return(
-      <div>
-      <div className="row">
-      	{this.renderSquare(0, charArray[0])}
-      	{this.renderSquare(1, charArray[1])}
-      	{this.renderSquare(2, charArray[2])}
-      	{this.renderSquare(3, charArray[3])}
-      	{this.renderSquare(4, charArray[4])}
-      </div>
-      <div className="row">
-      	{this.renderSquare(5, charArray[5])}
-      	{this.renderSquare(6, charArray[6])}
-      	{this.renderSquare(7, charArray[7])}
-      	{this.renderSquare(8, charArray[8])}
-      	{this.renderSquare(9, charArray[9])}
-      </div>
-      <div className="row">
-      	{this.renderSquare(10, charArray[10])}
-      	{this.renderSquare(11, charArray[11])}
-      	{this.renderSquare(12, charArray[12])}
-      	{this.renderSquare(13, charArray[13])}
-      	{this.renderSquare(14, charArray[14])}
-      </div>
-      <div className="row">
-      	{this.renderSquare(15, charArray[15])}
-      	{this.renderSquare(16, charArray[16])}
-      	{this.renderSquare(17, charArray[17])}
-      	{this.renderSquare(18, charArray[18])}
-      	{this.renderSquare(19, charArray[19])}
-      </div>
-      <div className="row">
-      	{this.renderSquare(20, charArray[20])}
-      	{this.renderSquare(21, charArray[21])}
-      	{this.renderSquare(22, charArray[22])}
-      	{this.renderSquare(23, charArray[23])}
-      	{this.renderSquare(24, charArray[24])}
-      </div>
+      <div ref="wrapper">
+      {
+      	for (let i = 0; i < configurations.length; i++) {
+      		if ( i % 5 === 0) {
+      			//make a new row
+      			let newRow = document.createElement("div");
+      			this.refs.wrapper.appendChild(newRow);
+      		}
+
+      		newRow.appendChild(this.renderSquare(i, charArray[i]));
+      	}
+     	}
       </div>
     )
   }
