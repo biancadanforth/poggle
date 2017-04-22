@@ -1,11 +1,18 @@
-import React from 'react';
+import React  from 'react';
 
-import Square           from './Square.jsx';
+import Square from './Square.jsx';
 
 class Board extends React.Component {
 
+	constructor() {
+		super();
+		this.state = {
+			lastClicked: null,
+		}
+	}
+
   renderSquare(i) {
-  	return <Square value={i} />;
+  	return <Square value={i} lastClicked={(value) => this.setState({lastClicked: value})} lastClickedId={this.state.lastClicked} />;
   }
   
   render() {
