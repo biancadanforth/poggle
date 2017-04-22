@@ -4,8 +4,8 @@ class Square extends React.Component {
   
   render() {
     return(
-      <div>
-      <p>Hiyo!</p>
+      <div className="tile">
+      <div>A</div>
       </div>
     )
   }
