@@ -1,4 +1,4 @@
-# test
+# .gitignore
 node_modules/
 src/build/
 .sass-cache/
