@@ -90,14 +90,17 @@ class App extends React.Component {
           <div className="score-box">
               <div className="word-list">
                 <div className="words">
+                <h2>Word</h2>
                   {wordList}
                 </div>
                 <div className="scores">
+                <h2>Score</h2>
                 {scoreList}
                 </div>
               </div>
               <div className="total-score">
-              {this.state.totalScore}
+              <h2>Total Score</h2>
+              <span>{this.state.totalScore}</span>
               </div>
           </div>
         </main>
