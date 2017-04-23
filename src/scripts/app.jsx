@@ -28,15 +28,23 @@ class App extends React.Component {
           <img src="/images/poggle.png" alt="Poggle" />
         </header>
         <main className="game-area">
-        <div className="blue-area">
-        <Board currentWord={(word) => this.getCurrentWord(word)} />
-        </div>
-        <div className="word-area">
-          <div className="current-header">Current Word</div>
-          <div className="current-word">{this.state.currentWord}</div>
-          <div>{/*status*/}</div>
-          <ol>{/*add later*/}</ol>
-        </div>
+          <div>
+            <div className="blue-area">
+            <Board currentWord={(word) => this.getCurrentWord(word)} />
+            </div>
+            <div className="word-area">
+              <div className="current-header">Current Word</div>
+              <div className="current-word">{this.state.currentWord}</div>
+            </div>
+            <div className="button"><div>SUBMIT WORD</div></div>
+          </div>
+          <div className="score-box">
+              <div className="word-list">
+                <div class="words"></div>
+                <div class="scores"></div>
+              </div>
+              <div className="total-score"></div>
+          </div>
         </main>
       </div>
     );
