@@ -9,7 +9,8 @@ class Submit extends React.Component {
     return (
       <button 
         className="button"
-        onClick={() => this.props.handleSubmit()}>
+        onClick={() => this.props.handleSubmit()}
+        disabled={this.props.isDisabled}>
         <div>SUBMIT WORD</div>
       </button>
     );

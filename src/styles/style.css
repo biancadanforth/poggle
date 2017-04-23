@@ -162,6 +162,11 @@
     cursor: pointer;
   }
 
+  .button:disabled {
+    background-color: grey;
+    cursor: default;
+  }
+
 
 
 /* Type Styles */

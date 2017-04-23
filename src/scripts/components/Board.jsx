@@ -123,7 +123,7 @@ class Board extends React.Component {
           <div className="current-header">Current Word</div>
           <div className="current-word">{this.state.currentWord}</div>
         </div>
-        <Submit handleSubmit={this.handleSubmit.bind(this)}/>
+        <Submit handleSubmit={this.handleSubmit.bind(this)} isDisabled={this.state.currentWord.length < 3 ? true : false}/>
       </div>
 
     );

@@ -17,7 +17,6 @@ class App extends React.Component {
       submittedWords: [],
       score: [],
       totalScore: 0,
-      shouldReset: false
     }
   }
 
@@ -26,7 +25,6 @@ class App extends React.Component {
   }
 
   handleSubmit() {
-    console.log("test");
     let submittedWord = this.state.currentWord;
     let score = this.calculateScore(submittedWord);
     this.setState((prevState) => {
@@ -38,7 +36,7 @@ class App extends React.Component {
         score: score,
         totalScore: prevState.totalScore
       }
-    }, this.resetBoard);
+    });
   }
 
   calculateScore(submittedWord) {
@@ -54,7 +52,6 @@ class App extends React.Component {
         <main className="game-area">
           <Board 
             currentWord={(word) => this.getCurrentWord(word)}
-            shouldReset={this.state.shouldReset}
             selected={this.state.selected}
             handleSubmit={() => this.handleSubmit()} />
           <div className="score-box">
