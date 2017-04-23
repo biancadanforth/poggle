@@ -1,6 +1,7 @@
-import React  from 'react';
+import React  	from 'react';
 
-import Square from './Square.jsx';
+import Square 	from './Square.jsx';
+import Submit   from './Submit.jsx';
 
 const configurations = ['aaafrs', 'aaeeee', 'aafirs', 'adennn', 'aeeeem', 'aeegmu', 'aegmnn', 'afirsy', 'bjkqxz', 'ccenst', 'ceiilt', 'ceilpt', 'ceipst', 'ddhnot', 'dhhlor', 'dhlnor', 'dhlnor', 'eiiitt', 'emottt', 'ensssu', 'fiprsy', 'gorrvw', 'iprrry', 'nootuw', 'ooottu'];
 
@@ -70,6 +71,12 @@ class Board extends React.Component {
 		}
 	}
 
+  handleSubmit() {
+    let newSelected = Array.apply(null, Array(25)).map(Boolean.prototype.valueOf, false);
+    this.setState({selected: newSelected, currentWord: ''});
+    this.props.handleSubmit();
+  }
+
   renderSquare(id, char) {
   	let newSelected = this.state.selected.slice();
   	return (
@@ -106,9 +113,19 @@ class Board extends React.Component {
   	}
 
     return (
-      <div ref="wrapper">
-      {rows}
+      <div>
+        <div className="blue-area">
+          <div ref="wrapper">
+			      {rows}
+		      </div>
+        </div>
+        <div className="word-area">
+          <div className="current-header">Current Word</div>
+          <div className="current-word">{this.state.currentWord}</div>
+        </div>
+        <Submit handleSubmit={this.handleSubmit.bind(this)}/>
       </div>
+
     );
   }
 }
