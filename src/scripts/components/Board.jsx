@@ -73,7 +73,7 @@ class Board extends React.Component {
 
   handleSubmit() {
     let newSelected = Array.apply(null, Array(25)).map(Boolean.prototype.valueOf, false);
-    this.setState({selected: newSelected, currentWord: ''});
+    this.setState({selected: newSelected, currentWord: '', lastClicked: null, history: []});
     this.props.handleSubmit();
   }
 

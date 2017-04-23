@@ -227,6 +227,14 @@
   display: block;
 }
 
+.submitted {
+  margin-top: 10px;
+}
+
+.submitted:first-child {
+  margin-top: 0;
+}
+
 .total-score h2 {
   text-align: left;
 }
