@@ -26,11 +26,12 @@ class Board extends React.Component {
 		this.state = {
 			lastClicked: null,
 			selected: Array.apply(null, Array(25)).map(Boolean.prototype.valueOf, false),
-			history: []
+			history: [],
+			currentWord: ''
 		}
 	}
 
-	handleLastClicked(id) {
+	handleLastClicked(id, value) {
 		// can't assign directly into elements of an object in setState, i.e. this.setState({selected[id]: true}) doesn't work.
 		let newSelected = this.state.selected.slice();
 		const prevId = this.state.lastClicked;
@@ -43,25 +44,29 @@ class Board extends React.Component {
 					newSelected[id] = true;
 					this.setState((prevState, props) => {
 						prevState.history.push(id);
-						return {lastClicked: id, selected: newSelected, history: prevState.history};
-					});
+						prevState.currentWord += value;
+						return {lastClicked: id, selected: newSelected, history: prevState.history, currentWord: prevState.currentWord};
+					}, () => this.props.currentWord(this.state.currentWord));
 				// if tile is selected AND it was the last clicked tile, deselect it and update lastClicked to have its previous value
 				} else if (id === this.state.lastClicked) {
 					newSelected[id] = false;
 					this.setState((prevState, props) => {
-						// pop the last element off history
+						// pop the last id off history
 						prevState.history.pop();
+						// remove last char in word
+						prevState.currentWord = prevState.currentWord.slice(0, prevState.currentWord.length - 1);
 						let lastLastClicked = prevState.history[prevState.history.length -1];
-						return {lastClicked: lastLastClicked , selected: newSelected, history: prevState.history};
-					});
+						return {lastClicked: lastLastClicked , selected: newSelected, history: prevState.history, currentWord: prevState.currentWord};
+					}, () => this.props.currentWord(this.state.currentWord));
 				}
 			}
 		} else {
 			newSelected[id] = true;
 			this.setState((prevState, props) => {
 				prevState.history.push(id);
-				return {lastClicked: id, selected: newSelected, history: prevState.history};
-			});
+				prevState.currentWord += value;
+				return {lastClicked: id, selected: newSelected, history: prevState.history, currentWord: prevState.currentWord};
+			}, () => this.props.currentWord(this.state.currentWord));
 		}
 	}
 
@@ -72,7 +77,7 @@ class Board extends React.Component {
 	  		key={id}
 	  		id={id}
 	  		value={char}
-	  		lastClicked={(id) => this.handleLastClicked(id)}
+	  		lastClicked={(id, char) => this.handleLastClicked(id, char)}
 	  		isSelected={newSelected[id]}/>
 		);
  }
