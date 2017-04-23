@@ -1,4 +1,4 @@
-# Project Title
+# Poggle
 
 A web application for the popular word search game, Poggle.
 
