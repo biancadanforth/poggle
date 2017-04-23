@@ -2,7 +2,6 @@
   "name": "poggle",
   "version": "1.0.0",
   "description": "A web application for the popular word search game, Poggle",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify src/scripts/app.jsx -o src/build/bundle.js",
@@ -10,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/biancadanforth/poggle.git"
+    "url": "https://github.com/biancadanforth/poggle.git"
   },
   "author": "Bianca Danforth",
   "license": "MIT",
