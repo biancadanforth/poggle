@@ -67,25 +67,44 @@ class Board extends React.Component {
 
   renderSquare(id, char) {
   	let newSelected = this.state.selected.slice();
-  	return <Square id={id} value={char} lastClicked={(id) => this.handleLastClicked(id)} isSelected={newSelected[id]}/>;
-  }
+  	return (
+  		<Square 
+	  		key={id}
+	  		id={id}
+	  		value={char}
+	  		lastClicked={(id) => this.handleLastClicked(id)}
+	  		isSelected={newSelected[id]}/>
+		);
+ }
   
   render() {
-    return(
-      <div ref="wrapper">
-      {
-      	for (let i = 0; i < configurations.length; i++) {
-      		if ( i % 5 === 0) {
-      			//make a new row
-      			let newRow = document.createElement("div");
-      			this.refs.wrapper.appendChild(newRow);
-      		}
+    let numRows = 5;
+    let numTiles = 5;
+    let rows = [];
+    let counter = 0;
 
-      		newRow.appendChild(this.renderSquare(i, charArray[i]));
-      	}
-     	}
+    for (let i = 0; i < numRows; i++) {
+    	let tiles = [];
+
+    	for (let j = 0; j < numTiles; j++) {
+  			tiles.push(
+  				this.renderSquare(counter, charArray[counter])
+				);
+				counter++;
+  		}
+
+    	rows.push(
+    		<div key={i} className="row">
+    			{tiles}
+    		</div>
+  		);
+  	}
+
+    return (
+      <div ref="wrapper">
+      {rows}
       </div>
-    )
+    );
   }
 }
 
