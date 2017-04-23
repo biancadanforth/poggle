@@ -1,10 +1,10 @@
 // app.jsx
 
 // Imports
-import React            from 'react';
-import ReactDOM         from 'react-dom';
+import React    from 'react';
+import ReactDOM from 'react-dom';
 
-import Board            from './components/Board.jsx';
+import Board    from './components/Board.jsx';
 
 const render = ReactDOM.render;
 
@@ -99,8 +99,8 @@ class App extends React.Component {
                 </div>
               </div>
               <div className="total-score">
-              <h2>Total Score</h2>
-              <span>{this.state.totalScore}</span>
+                <h2>Total Score</h2>
+                <span>{this.state.totalScore}</span>
               </div>
           </div>
         </main>

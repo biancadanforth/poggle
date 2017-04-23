@@ -1,7 +1,7 @@
 // Submit.jsx
 
 // Imports
-import React            from 'react';
+import React from 'react';
 
 class Submit extends React.Component {
 
@@ -11,7 +11,7 @@ class Submit extends React.Component {
         className="button"
         onClick={() => this.props.handleSubmit()}
         disabled={this.props.isDisabled}>
-        <div>SUBMIT WORD</div>
+        <div>Submit Word</div>
       </button>
     );
   }
