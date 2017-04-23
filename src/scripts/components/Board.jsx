@@ -54,8 +54,12 @@ class Board extends React.Component {
 					this.setState((prevState, props) => {
 						// pop the last id off history
 						prevState.history.pop();
-						// remove last char in word
-						prevState.currentWord = prevState.currentWord.slice(0, prevState.currentWord.length - 1);
+						// remove last char (or chars, if a Q) in word
+						if (value.toLowerCase() === "qu") {
+							prevState.currentWord = prevState.currentWord.slice(0, prevState.currentWord.length - 2);
+						} else {
+							prevState.currentWord = prevState.currentWord.slice(0, prevState.currentWord.length - 1);
+						}
 						let lastLastClicked = prevState.history[prevState.history.length -1];
 						return {lastClicked: lastLastClicked , selected: newSelected, history: prevState.history, currentWord: prevState.currentWord};
 					}, () => this.props.currentWord(this.state.currentWord));
