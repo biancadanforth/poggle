@@ -26,18 +26,24 @@ class App extends React.Component {
 
   handleSubmit() {
     let submittedWord = this.state.currentWord;
-    let score = this.calculateScore(submittedWord);
-    this.setState((prevState) => {
-      prevState.submittedWords.push(this.state.currentWord);
-      prevState.score.push(score);
-      prevState.totalScore += score;
-      return {
-        currentWord: '',
-        submittedWords: prevState.submittedWords,
-        score: prevState.score,
-        totalScore: prevState.totalScore
-      }
-    });
+    let submittedWords = this.state.submittedWords.slice();
+    // check for duplicate word:
+    if (submittedWords.indexOf(submittedWord) !== -1) {
+      alert('You have already submitted that word. Please select another word.');
+    } else {
+      let score = this.calculateScore(submittedWord);
+      this.setState((prevState) => {
+        prevState.submittedWords.push(this.state.currentWord);
+        prevState.score.push(score);
+        prevState.totalScore += score;
+        return {
+          currentWord: '',
+          submittedWords: prevState.submittedWords,
+          score: prevState.score,
+          totalScore: prevState.totalScore
+        }
+      });
+    }
   }
 
   calculateScore(submittedWord) {

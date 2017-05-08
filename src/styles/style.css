@@ -13,7 +13,7 @@
   }
 
   .container {
-    width: 630px;
+    width: 700px;
     margin: 0 auto;
     overflow: auto;
   }
@@ -42,6 +42,8 @@
     padding: 20px;
     margin:0;
     display: flex;
+    justify-content: center;
+    min-width: 320px;
   }
 
   .game-area div {
@@ -51,6 +53,7 @@
   }
 
   .blue-area {
+    min-width: 320px;
     background: #DBF1FF;
     padding: 15px;
     width: 100%;
@@ -80,7 +83,7 @@
 /* Score Area */
 
   .score-box {
-  	width: 200px;
+  	min-width: 200px;
   	border-radius: 5px;
   	border: solid 1px #d3dee6;
     float: right;
@@ -229,6 +232,7 @@
   .current-word {
     font-size: 30px;
     min-height: 30px;
+    max-width: 290px;
   	font-weight: normal;
   	letter-spacing: 3px;
   	text-align: center;

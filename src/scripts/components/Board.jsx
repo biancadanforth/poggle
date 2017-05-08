@@ -58,7 +58,6 @@ class Board extends React.Component {
 				adjTileIds = [prevId, prevId-6, prevId-5, prevId-4,
 				prevId-1, prevId+1, prevId+4, prevId+5, prevId+6];
 			}
-			console.log(adjTileIds);
 			// if the clicked tile is adjacent to the last clicked tile:
 			if (adjTileIds.indexOf(id) !== -1) {
 				// if tile is not selected, select it and update lastClickedId
