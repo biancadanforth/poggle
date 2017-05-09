@@ -45,14 +45,10 @@ class Board extends React.Component {
 		let adjTileIds;
 		// 0 is falsy
 		if (prevId || prevId === 0) {
-			let edgeTiles = [1, 2, 3, 5, 10, 15, 9, 14, 19, 21, 22, 23];
-			let cornerTiles = [0, 4, 20, 24];
-			// is it an edge tile? (id = 1-3, 5, 10, 15, 9, 14, 19, 21-23)
+			let edgeTiles = [0, 1, 2, 3, 4, 5, 10, 15, 9, 14, 19, 20, 21, 22, 23, 24];
+			// is it an edge tile?
 			if (edgeTiles.indexOf(prevId) !== -1) {
-				adjTileIds = this.getAdjacentTiles(edgeTiles, prevId);
-			// is it a corner tile? (id = 0, 4, 20, 24)
-			} else if (cornerTiles.indexOf(prevId) !== -1) {
-				adjTileIds = this.getAdjacentTiles(cornerTiles, prevId);
+				adjTileIds = this.getAdjacentTiles(prevId);
 			// else it's in the middle:
 			} else {
 				adjTileIds = [prevId, prevId-6, prevId-5, prevId-4,
@@ -74,7 +70,7 @@ class Board extends React.Component {
 		}
 	}
 
-	getAdjacentTiles(tiles, prevId) {
+	getAdjacentTiles(prevId) {
 		switch (prevId) {
 			case 0:
 				return [0, 1, 5, 6];
