@@ -91,7 +91,6 @@ class App extends React.Component {
         <main className="game-area">
           <Board 
             currentWord={(word) => this.getCurrentWord(word)}
-            selected={this.state.selected}
             handleSubmit={() => this.handleSubmit()} />
           <div className="score-box">
               <div className="word-list">

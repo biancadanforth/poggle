@@ -3,26 +3,71 @@ import React 	from 'react';
 import Square from './Square.jsx';
 import Submit from './Submit.jsx';
 
-const configurations = ['aaafrs', 'aaeeee', 'aafirs', 'adennn',
- 'aeeeem', 'aeegmu', 'aegmnn', 'afirsy', 'bjkqxz', 'ccenst',
- 'ceiilt', 'ceilpt', 'ceipst', 'ddhnot', 'dhhlor', 'dhlnor',
- 'dhlnor', 'eiiitt', 'emottt', 'ensssu', 'fiprsy', 'gorrvw',
- 'iprrry', 'nootuw', 'ooottu'];
+// ----- GENERATE GAME BOARD TILE VALUES -----
 
-let newConfigurations = configurations.slice();
-let charArray = [];
-for (let i = 0; i < configurations.length; i++) {
-	let configIndex = Math.floor(Math.random()*newConfigurations.length);
-	let configString = newConfigurations[configIndex];
-	// remove result from array so it doesn't recurr
-	newConfigurations.splice(configIndex, 1);
-	let configCharIndex = Math.floor(Math.random()*configString.length);
-	let configChar = configString.charAt(configCharIndex);
-	if (configChar === 'q') {
-		configChar = 'qu';
+const numRows = 5;
+const numTiles = 5;
+const configurations = [
+	'aaafrs',
+	'aaeeee',
+	'aafirs',
+	'adennn',
+	'aeeeem',
+	'aeegmu',
+	'aegmnn',
+	'afirsy',
+	'bjkqxz',
+	'ccenst',
+	'ceiilt',
+	'ceilpt',
+	'ceipst',
+	'ddhnot',
+	'dhhlor',
+	'dhlnor',
+	'dhlnor',
+	'eiiitt',
+	'emottt',
+	'ensssu',
+	'fiprsy',
+	'gorrvw',
+	'iprrry',
+	'nootuw',
+	'ooottu'
+];
+
+let charArray = getTileValues();
+
+// Outputs a matrix charArray, each element corresponds to an alphabetical character, each char represents the result of a random dice role based on the configurations provided for the dies.
+// charArray is of the form (values are randomized in reality):
+// [
+//   ['a', 'b', 'c', 'd', 'e'],
+//   ['f', 'g', 'h', 'i', 'j'],
+//   ['k', 'l', 'm', 'n', 'o'],
+//   ['p', 'q', 'r', 's', 't'],
+//   ['u', 'v', 'w', 'x', 'y']
+// ]
+function getTileValues() {
+	let newConfigurations = configurations.slice();
+	let charArray = [];
+	for (let i = 0; i < numRows; i++) {
+		let rowArray = [];
+		for (let j = 0; j < numTiles; j++) {
+			let configIndex = Math.floor(Math.random()*newConfigurations.length);
+			let configString = newConfigurations[configIndex];
+			// remove result from array so it doesn't recurr
+			newConfigurations.splice(configIndex, 1);
+			let configCharIndex = Math.floor(Math.random()*configString.length);
+			let configChar = configString.charAt(configCharIndex);
+			if (configChar === 'q') {
+			configChar = 'qu';
+			}
+			rowArray.push(configChar);
+		}
+		charArray.push(rowArray);
 	}
-	charArray.push(configChar);
+	return charArray;
 }
+
 
 class Board extends React.Component {
 
@@ -30,110 +75,79 @@ class Board extends React.Component {
 		super();
 		this.state = {
 			lastClicked: null,
-			selected: Array.apply(null, Array(25))
-				.map(Boolean.prototype.valueOf, false),
+			selected: [
+    	[false, false, false, false, false],
+    	[false, false, false, false, false],
+    	[false, false, false, false, false],
+    	[false, false, false, false, false],
+    	[false, false, false, false, false]
+    ],
 			history: [],
 			currentWord: ''
 		}
 	}
 
-	handleLastClicked(id, value) {
+	handleLastClicked(key, value) {
 		// can't assign directly into elements of an object in setState,
 		// i.e. this.setState({selected[id]: true}) doesn't work.
 		let newSelected = this.state.selected.slice();
-		const prevId = this.state.lastClicked;
-		let adjTileIds;
-		// 0 is falsy
-		if (prevId || prevId === 0) {
-			let edgeTiles = [0, 1, 2, 3, 4, 5, 10, 15, 9, 14, 19, 20, 21, 22, 23, 24];
-			// is it an edge tile?
-			if (edgeTiles.indexOf(prevId) !== -1) {
-				adjTileIds = this.getAdjacentTiles(prevId);
-			// else it's in the middle:
-			} else {
-				adjTileIds = [prevId, prevId-6, prevId-5, prevId-4,
-				prevId-1, prevId+1, prevId+4, prevId+5, prevId+6];
-			}
-			// if the clicked tile is adjacent to the last clicked tile:
-			if (adjTileIds.indexOf(id) !== -1) {
-				// if tile is not selected, select it and update lastClickedId
-				if (!(newSelected[id])) {
-					this.addTile(id, value, newSelected);
+		const prevKey = this.state.lastClicked;
+		// if this isn't the first tile of the game (lastClicked is null for the first tile)
+		if (prevKey) {
+			const i = Number(key.charAt(0));
+			const j = Number(key.charAt(1));
+			// checks if the clicked tile is adjacent to the last clicked tile
+			if (this.isAdjacent(Number(key.charAt(0)), Number(key.charAt(1)))) {
+				// if tile is not selected, select it and update lastClicked
+				if (!(newSelected[i][j])) {
+					this.addTile(key, value, newSelected);
+				} 
 				// if tile is selected AND it was the last clicked tile,
 				// deselect it and update lastClicked to have its previous value
-				} else if (id === this.state.lastClicked) {
-					this.removeTile(id, value, newSelected);
-				}
+			} else if (newSelected[i][j] && (key === this.state.lastClicked)) {
+					this.removeTile(key, value, newSelected);
 			}
 		} else {
-			this.addTile(id, value, newSelected);
+			this.addTile(key, value, newSelected);
 		}
 	}
 
-	getAdjacentTiles(prevId) {
-		switch (prevId) {
-			case 0:
-				return [0, 1, 5, 6];
-				break;
-			case 1:
-				return [1, 0, 5, 6, 7, 2];
-				break;
-			case 2:
-				return [2, 1, 6, 7, 8, 3];
-				break;
-			case 3:
-				return [3, 2, 7, 8, 9, 4];
-				break;
-			case 4:
-				return [4, 3, 9, 8];
-				break;
-			case 5:
-				return [5, 0, 1, 6, 11, 10];
-				break;
-			case 9:
-				return [9, 4, 3, 8, 13, 14];
-				break;
-			case 10:
-				return [10, 5, 6, 11, 16, 15];
-				break;
-			case 14:
-				return [14, 9, 8, 13, 18, 19];
-				break;
-			case 15:
-				return [15, 10, 11, 16, 20, 21];
-				break;
-			case 19:
-				return [19, 14, 13, 18, 23, 24];
-				break;
-			case 20:
-				return [20, 15, 16, 21];
-				break;
-			case 21:
-				return [21, 20, 15, 16, 17, 22];
-				break;
-			case 22:
-				return [22, 21, 16, 17, 18, 23];
-				break;
-			case 23:
-				return [23, 22, 17, 18, 19, 24];
-				break;
-			case 24:
-				return [24, 18, 19, 23];
-				break;
-			default:
-				return [prevId, prevId-6, prevId-5, prevId-4,
-				prevId-1, prevId+1, prevId+4, prevId+5, prevId+6];
-				break;
-		}
+	isAdjacent(nextI, nextJ) {
+		const prevKey = this.state.lastClicked;
+		const i = Number(prevKey.charAt(0));
+		const j = Number(prevKey.charAt(1));
+		// get all adjacent indices, whether they exist or not
+	  const adjIndices = [
+	    [i - 1, j - 1],
+	    [i - 1, j],
+	    [i - 1, j + 1],
+	    [i, j - 1],
+	    [i, j + 1],
+	    [i + 1, j -1],
+	    [i + 1, j],
+	    [i + 1, j + 1]
+	    ];
+	    
+	  // Arrays, like all non-primitive types in, are checked by reference, not by value. Whenever you create a new instance of an object (like an array), the variable is actually a pointer to a location in memory where the object resides.
+	  // For this reason, indexOf won't work because you're comparing pointers to two different arrays.
+	  // You have to compare the values manually
+	  for (let k = 0; k < adjIndices.length; k++) {
+	    if (adjIndices[k][0] === nextI && adjIndices[k][1] === nextJ) {
+	      return true;
+	    }
+	  }
+	  return false;
 	}
 
-	addTile(id, value, newSelected) {
-		newSelected[id] = true;
+	addTile(key, value, newSelected) {
+		const i = Number(key.charAt(0));
+		const j = Number(key.charAt(1));
+		newSelected[i][j] = true;
 		this.setState((prevState, props) => {
-			prevState.history.push(id);
+			prevState.history.push(key);
 			prevState.currentWord += value;
 			return {
-				lastClicked: id,
+				lastClicked: key,
 				selected: newSelected,
 				history: prevState.history,
 				currentWord: prevState.currentWord
@@ -141,11 +155,13 @@ class Board extends React.Component {
 		}, () => this.props.currentWord(this.state.currentWord));
 	}
 
-	removeTile(id, value, newSelected) {
-		newSelected[id] = false;
+	removeTile(key, value, newSelected) {
+		const i = Number(key.charAt(0));
+		const j = Number(key.charAt(1));
+		newSelected[i][j] = false;
 		this.setState((prevState, props) => {
 			prevState.history.pop();
-			// remove last char (or chars, if a Q) in word
+			// remove last char (or chars, if a Qu) in word
 			if (value.toLowerCase() === "qu") {
 				prevState.currentWord = prevState.currentWord
 					.slice(0, prevState.currentWord.length - 2);
@@ -153,19 +169,25 @@ class Board extends React.Component {
 				prevState.currentWord = prevState.currentWord
 					.slice(0, prevState.currentWord.length - 1);
 			}
-			let lastLastClicked = prevState
+			const lastLastClicked = prevState
 				.history[prevState.history.length -1];
 			return {
-				lastClicked: lastLastClicked ,
+				lastClicked: lastLastClicked,
 				selected: newSelected,
 				history: prevState.history,
-				currentWord: prevState.currentWord};
+				currentWord: prevState.currentWord
+			};
 		}, () => this.props.currentWord(this.state.currentWord));
 	}
 
   handleSubmit() {
-    let newSelected = Array.apply(null, Array(25))
-    	.map(Boolean.prototype.valueOf, false);
+    const newSelected = [
+    	[false, false, false, false, false],
+    	[false, false, false, false, false],
+    	[false, false, false, false, false],
+    	[false, false, false, false, false],
+    	[false, false, false, false, false]
+    ];
     this.setState({
     	selected: newSelected,
     	currentWord: '',
@@ -174,34 +196,32 @@ class Board extends React.Component {
     this.props.handleSubmit();
   }
 
-  renderSquare(id, char) {
-  	let newSelected = this.state.selected.slice();
+  // key is a two-digit string representing the coordinates of the square on the board. Ex: id = "42" means the tile located in the 4th row, 2nd column (indexed from 0).
+  renderSquare(key, char) {
+  	const newSelected = this.state.selected.slice();
+  	const i = Number(key.charAt(0));
+  	const j = Number(key.charAt(1));
   	return (
+  		// to generate JSX in a loop, each element must have a unique key
   		<Square 
-	  		key={id}
-	  		id={id}
+	  		key={key}
+	  		id = {key}
 	  		value={char}
-	  		lastClicked={(id, char) => this.handleLastClicked(id, char)}
-	  		isSelected={newSelected[id]}/>
+	  		lastClicked={(key, char) => this.handleLastClicked(key, char)}
+	  		isSelected={newSelected[i][j]}/>
 		);
  }
   
   render() {
-    let numRows = 5;
-    let numTiles = 5;
     let rows = [];
-    let counter = 0;
-
     for (let i = 0; i < numRows; i++) {
     	let tiles = [];
-
     	for (let j = 0; j < numTiles; j++) {
   			tiles.push(
-  				this.renderSquare(counter, charArray[counter])
+  				this.renderSquare(i.toString() + j.toString(), charArray[i][j])
 				);
-				counter++;
   		}
-
+  		// to generate JSX in a loop, each element must have a unique key
     	rows.push(
     		<div key={i} className="row">
     			{tiles}
