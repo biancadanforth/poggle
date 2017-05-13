@@ -17,6 +17,7 @@ class App extends React.Component {
       submittedWords: [],
       score: [],
       totalScore: 0,
+      shouldBounce: false
     }
   }
 
@@ -29,7 +30,10 @@ class App extends React.Component {
     let submittedWords = this.state.submittedWords.slice();
     // check for duplicate word:
     if (submittedWords.indexOf(submittedWord) !== -1) {
-      alert('You have already submitted that word. Please select another word.');
+      // bounce animation on submit button to indicate an invalid word
+      this.setState({shouldBounce: true});
+      setTimeout(() => this.setState({shouldBounce: false})
+      , 1000);
     } else {
       let score = this.calculateScore(submittedWord);
       this.setState((prevState) => {
@@ -91,7 +95,8 @@ class App extends React.Component {
         <main className="game-area">
           <Board 
             currentWord={(word) => this.getCurrentWord(word)}
-            handleSubmit={() => this.handleSubmit()} />
+            handleSubmit={() => this.handleSubmit()}
+            shouldBounce={this.state.shouldBounce} />
           <div className="score-box">
               <div className="word-list">
                 <div className="words">

@@ -157,8 +157,6 @@
   .button {
   	position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
     width: 100%;
   	border-radius: 5px;
     border-width: 0;
@@ -179,6 +177,53 @@
   .button:disabled {
     background-color: grey;
     cursor: default;
+  }
+
+  .bounce {
+    outline: 1px solid red;
+    animation-name: bounce;
+    animation-duration: .5s;
+    animation-delay: 0.25s;
+  }
+
+  /*
+  * Approximates a critically damped sinusoidal function
+  * centered around zero. Inspiration: easeInOutBounce
+  * timing-function from easings.net
+  */
+  @keyframes bounce {
+    0% {
+      transform: translateX(0px);
+      animation-timing-function: ease-in;
+    }
+    37% {
+      transform: translateX(5px);
+      animation-timing-function: ease-out;
+    }
+    55% {
+      transform: translateX(-5px);
+      animation-timing-function: ease-in;
+    }
+    73% {
+      transform: translateX(4px);
+      animation-timing-function: ease-out;
+    }
+    82% {
+      transform: translateX(-4px);
+      animation-timing-function: ease-in;
+    }
+    91% {
+      transform: translateX(2px);
+      animation-timing-function: ease-out;
+    }
+    96% {
+      transform: translateX(-2px);
+      animation-timing-function: ease-in;
+    }
+    100% {
+      transform: translateX(0px);
+      animation-timing-function: ease-out;
+    }
   }
 
 /* Type Styles */

@@ -83,7 +83,8 @@ class Board extends React.Component {
     	[false, false, false, false, false]
     ],
 			history: [],
-			currentWord: ''
+			currentWord: '',
+			shouldBounce: false
 		}
 	}
 
@@ -190,16 +191,14 @@ class Board extends React.Component {
 				method: 'get'
 			}).then((response) => {
 				response.text().then((value) => {
-					console.log(value);
-					if (value.includes('id="' + word)) {
-						console.log('is in dictionary');
-			    	const newSelected = [
+					const newSelected = [
 		    		[false, false, false, false, false],
 		    		[false, false, false, false, false],
 		    		[false, false, false, false, false],
 		    		[false, false, false, false, false],
 		    		[false, false, false, false, false]
 		    	];
+					if (value.includes('id="' + word)) {
 			    this.setState({
 			    	selected: newSelected,
 			    	currentWord: '',
@@ -207,8 +206,16 @@ class Board extends React.Component {
 			    	history: []});
 			    this.props.handleSubmit();
 					} else {
-    				alert(this.state.currentWord.toUpperCase() + ' is not a word!');
-  				}
+						// bounce animation on submit button to indicate an invalid word
+    				this.setState({shouldBounce: true});
+			      setTimeout(() => this.setState({shouldBounce: false})
+			      , 1000);
+			      this.setState({
+			    	selected: newSelected,
+			    	currentWord: '',
+			    	lastClicked: null,
+			    	history: []});
+			  	}
 				});
 			}).catch((err) => {
 				console.error('Failed to fetch XML object from dictionary API.');
@@ -261,7 +268,9 @@ class Board extends React.Component {
         </div>
         <Submit 
         	handleSubmit={this.handleSubmit.bind(this)}
-        	isDisabled={this.state.currentWord.length < 3 ? true : false}/>
+        	isDisabled={this.state.currentWord.length < 3 ? true : false}
+					ref='submit'
+					shouldBounce={(this.state.shouldBounce || this.props.shouldBounce) ? true : false}/>
       </div>
 
     );
