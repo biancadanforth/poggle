@@ -198,7 +198,8 @@ class Board extends React.Component {
 		    		[false, false, false, false, false],
 		    		[false, false, false, false, false]
 		    	];
-					if (value.includes('id="' + word)) {
+		    	//if it's not a word, the API will return a list of suggestions, enclosed with the <suggestion> XML tag.
+					if (!(value.includes('<suggestion>'))) {
 			    this.setState({
 			    	selected: newSelected,
 			    	currentWord: '',
