@@ -181,19 +181,38 @@ class Board extends React.Component {
 	}
 
   handleSubmit() {
-    const newSelected = [
-    	[false, false, false, false, false],
-    	[false, false, false, false, false],
-    	[false, false, false, false, false],
-    	[false, false, false, false, false],
-    	[false, false, false, false, false]
-    ];
-    this.setState({
-    	selected: newSelected,
-    	currentWord: '',
-    	lastClicked: null,
-    	history: []});
-    this.props.handleSubmit();
+    const word = this.state.currentWord;
+    // checks if the current word is a valid word in the Merriam-Webster dictionary.
+    // http://dictionaryapi.com/products/api-collegiate-dictionary.htm
+    // The window.fetch method is a new browser web API method to replace XmlHttpRequest API.
+    // use arrow functions so this still points to the <Board /> component
+		fetch('http://www.dictionaryapi.com/api/v1/references/collegiate/xml/' + word + '?key=9aa544f7-f7ce-4d87-a5a3-2a7695f6397f', {
+				method: 'get'
+			}).then((response) => {
+				response.text().then((value) => {
+					console.log(value);
+					if (value.includes('id="' + word)) {
+						console.log('is in dictionary');
+			    	const newSelected = [
+		    		[false, false, false, false, false],
+		    		[false, false, false, false, false],
+		    		[false, false, false, false, false],
+		    		[false, false, false, false, false],
+		    		[false, false, false, false, false]
+		    	];
+			    this.setState({
+			    	selected: newSelected,
+			    	currentWord: '',
+			    	lastClicked: null,
+			    	history: []});
+			    this.props.handleSubmit();
+					} else {
+    				alert(this.state.currentWord.toUpperCase() + ' is not a word!');
+  				}
+				});
+			}).catch((err) => {
+				console.error('Failed to fetch XML object from dictionary API.');
+			});
   }
 
   // key is a two-digit string representing the coordinates of the square on the board. Ex: id = "42" means the tile located in the 4th row, 2nd column (indexed from 0).
