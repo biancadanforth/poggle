@@ -3,6 +3,9 @@ import React 	from 'react';
 import Square from './Square.jsx';
 import Submit from './Submit.jsx';
 
+// Displayed on screen if user submits an invalid word or if user has already submitted a word and tries to submit it again.
+let errorMessage = '';
+
 // ----- GENERATE GAME BOARD TILE VALUES -----
 
 const numRows = 5;
@@ -191,7 +194,6 @@ class Board extends React.Component {
 				method: 'get'
 			}).then((response) => {
 				response.text().then((value) => {
-					console.log(value);
 					const newSelected = [
 		    		[false, false, false, false, false],
 		    		[false, false, false, false, false],
@@ -200,8 +202,8 @@ class Board extends React.Component {
 		    		[false, false, false, false, false]
 		    	];
 		    	//if it's not a word, the API will return a list of suggestions, enclosed with the <suggestion> XML tag.
-		    	console.log(this.props.shouldBounce);
-					if (value.includes('<entry_list') && this.props.submittedWords.indexOf(this.state.currentWord) === -1) {
+					if (!(value.includes('<suggestion>')) && !(value.includes('<fl>abbreviation</fl>')) && this.props.submittedWords.indexOf(this.state.currentWord) === -1) {
+						errorMessage = '';
 						// the word is in the dictionary (aka valid)
 			    this.setState({
 			    	selected: newSelected,
@@ -210,6 +212,11 @@ class Board extends React.Component {
 			    	history: []});
 			    this.props.handleSubmit();
 					} else {
+						if (!(value.includes('<suggestion>')) && !(value.includes('<fl>abbreviation</fl>'))) {
+							errorMessage = this.state.currentWord.toUpperCase() + " has already been submitted!";
+						} else {
+							errorMessage = this.state.currentWord.toUpperCase() + " is not a real word!";
+						}
 						// bounce animation on submit button to indicate an invalid word
     				this.setState({shouldBounce: true});
 			      setTimeout(() => this.setState({shouldBounce: false})
@@ -265,10 +272,10 @@ class Board extends React.Component {
           <div className="current-header">Current Word</div>
           <div className="current-word">{this.state.currentWord}</div>
         </div>
+        <span className="error-message">{errorMessage}</span>
         <Submit 
         	handleSubmit={this.handleSubmit.bind(this)}
         	isDisabled={this.state.currentWord.length < 3 ? true : false}
-					ref='submit'
 					shouldBounce={(this.state.shouldBounce || this.props.shouldBounce) ? true : false}/>
       </div>
 

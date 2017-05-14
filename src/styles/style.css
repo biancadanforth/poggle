@@ -13,7 +13,7 @@
   }
 
   .container {
-    width: 700px;
+    width: 600px;
     margin: 0 auto;
     overflow: auto;
   }
@@ -39,7 +39,6 @@
 /* Game Area */
 
   .game-area {
-    padding: 20px;
     margin:0;
     display: flex;
     justify-content: center;
@@ -87,7 +86,7 @@
   	border-radius: 5px;
   	border: solid 1px #d3dee6;
     float: right;
-    margin: 0 15px;
+    margin-left: 15px;
     padding: 20px;
   }
 
@@ -152,17 +151,24 @@
     cursor: pointer;
   }
 
+  .error-message {
+    display: inline-block;
+    margin-top: 20px;
+    text-transform: none;
+    color: red;
+  }
+
 /* Button States */
 
   .button {
   	position: absolute;
     bottom: 0;
+    left: 0;
     width: 100%;
   	border-radius: 5px;
     border-width: 0;
   	background-color: #1287ff;
     padding: 10px;
-    margin-top: 30px;
     text-transform: uppercase;
     -webkit-transition: background 0.5s; /* Safari */
     transition: background 0.5s;
