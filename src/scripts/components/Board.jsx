@@ -191,6 +191,7 @@ class Board extends React.Component {
 				method: 'get'
 			}).then((response) => {
 				response.text().then((value) => {
+					console.log(value);
 					const newSelected = [
 		    		[false, false, false, false, false],
 		    		[false, false, false, false, false],
@@ -199,7 +200,9 @@ class Board extends React.Component {
 		    		[false, false, false, false, false]
 		    	];
 		    	//if it's not a word, the API will return a list of suggestions, enclosed with the <suggestion> XML tag.
-					if (!(value.includes('<suggestion>'))) {
+		    	console.log(this.props.shouldBounce);
+					if (value.includes('<entry_list') && this.props.submittedWords.indexOf(this.state.currentWord) === -1) {
+						// the word is in the dictionary (aka valid)
 			    this.setState({
 			    	selected: newSelected,
 			    	currentWord: '',
@@ -211,11 +214,6 @@ class Board extends React.Component {
     				this.setState({shouldBounce: true});
 			      setTimeout(() => this.setState({shouldBounce: false})
 			      , 1000);
-			      this.setState({
-			    	selected: newSelected,
-			    	currentWord: '',
-			    	lastClicked: null,
-			    	history: []});
 			  	}
 				});
 			}).catch((err) => {
